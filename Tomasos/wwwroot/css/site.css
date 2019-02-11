@@ -60,7 +60,7 @@ body {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
-    height: 500px;
+    /*height: 500px;*/
     justify-content: center;
     align-items: center;
 
@@ -68,7 +68,7 @@ body {
 }
 .vertical-center {
     min-height: 100%;  /* Fallback for browsers do NOT support vh unit */
-    min-height: 93vh; /* These two lines are counted as one :-)       */
+    min-height: 35vh; /* These two lines are counted as one :-)       */
 
     display: flex;
     align-items: center;
