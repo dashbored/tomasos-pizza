@@ -58,3 +58,4 @@ C:\Users\Richard\Desktop\C#\Inlamning\tomasos-pizza\Tomasos\obj\Debug\netcoreapp
 C:\Users\Richard\Desktop\C#\Inlamning\tomasos-pizza\Tomasos\obj\Debug\netcoreapp2.2\Tomasos.dll
 C:\Users\Richard\Desktop\C#\Inlamning\tomasos-pizza\Tomasos\obj\Debug\netcoreapp2.2\Tomasos.pdb
 C:\Users\Richard\Desktop\C#\Inlamning\tomasos-pizza\Tomasos\obj\Debug\netcoreapp2.2\Tomasos.csproj.CopyComplete
+C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Shared\_LoginPartial.g.cshtml.cs
