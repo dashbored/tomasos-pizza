@@ -23,8 +23,13 @@ using Tomasos.Models;
 
 #line default
 #line hidden
+#line 3 "C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\Views\_ViewImports.cshtml"
+using Tomasos.Models.AccountViewModels;
+
+#line default
+#line hidden
     [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"7091c65830b0329e613be026ede8a57552863778", @"/Views/_ViewStart.cshtml")]
-    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"61ad15fce2070f53208ed5b38db8198b9501123b", @"/Views/_ViewImports.cshtml")]
+    [global::Microsoft.AspNetCore.Razor.Hosting.RazorSourceChecksumAttribute(@"SHA1", @"70f7e34b1df4767ab73d519f371120aa3bab0798", @"/Views/_ViewImports.cshtml")]
     public class Views__ViewStart : global::Microsoft.AspNetCore.Mvc.Razor.RazorPage<dynamic>
     {
         #pragma warning disable 1998

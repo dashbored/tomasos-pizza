@@ -83,3 +83,8 @@ body {
     margin-left: 0;
     margin-right: 0;
 }
+
+a.navbar-brand {
+    width: 168px;
+    text-align: start;
+}
