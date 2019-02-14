@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tomasos.Models
+namespace Tomasos.Models.Identity
 {
     public partial class MatrattProdukt
     {

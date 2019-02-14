@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -31,19 +32,22 @@ namespace Tomasos.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Register(string returnUrl = null)
+        public IActionResult Register()
         {
-            ViewData["returnUrl"] = returnUrl;
+
             return View();
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
-            ViewData["returnUrl"] = returnUrl;
+
             if (ModelState.IsValid)
             {
+
+
                 var user = new ApplicationUser
                 {
                     UserName = model.Email,
@@ -56,8 +60,10 @@ namespace Tomasos.Controllers
                     _logger.LogInformation("User created a new account with password");
                     await _signInManager.SignInAsync(user, false);
                     _logger.LogInformation("User logged in a new account with password");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
+                AddErrors(result);
+
             }
 
             return View(model);
@@ -65,18 +71,17 @@ namespace Tomasos.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public IActionResult Login(string returnUrl = null)
+        public async Task<IActionResult> Login()
         {
-            ViewData["returnUrl"] = returnUrl;
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
-            ViewData["returnUrl"] = returnUrl;
 
             if (ModelState.IsValid)
             {
@@ -84,14 +89,18 @@ namespace Tomasos.Controllers
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User logged in.");
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("Index", "Home");
                 }
 
                 if (result.IsLockedOut)
                 {
                     _logger.LogWarning("User account is locked out.");
+
                     return View();
                 }
+
+                ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+
 
                 return View(model);
 
@@ -100,19 +109,39 @@ namespace Tomasos.Controllers
             return View(model);
         }
 
-
-
-
-
-        private IActionResult RedirectToLocal(string returnUrl)
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
         {
-            if (Url.IsLocalUrl(returnUrl))
+            await _signInManager.SignOutAsync();
+            _logger.LogInformation("User logged out.");
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public IActionResult Manage()
+        {
+            return View("Login");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Manage(ManageViewModel model)
+        {
+            var currentUser = await _userManager.GetUserAsync(User);
+            if (currentUser == null)
             {
-                return Redirect(returnUrl);
+                return Challenge();
             }
-            else
+
+            return View("Login");
+        }
+
+        private void AddErrors(IdentityResult result)
+        {
+            foreach (var error in result.Errors)
             {
-                return RedirectToAction(nameof(HomeController.Index), "Home");
+                ModelState.AddModelError(string.Empty, error.Description);
             }
         }
     }

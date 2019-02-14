@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Tomasos.Models
+namespace Tomasos.Models.Identity
 {
     public partial class Kund
     {
@@ -17,8 +17,6 @@ namespace Tomasos.Models
         public string Postort { get; set; }
         public string Email { get; set; }
         public string Telefon { get; set; }
-        public string AnvandarNamn { get; set; }
-        public string Losenord { get; set; }
         public string IdentityId { get; set; }
 
         public virtual ICollection<Bestallning> Bestallning { get; set; }

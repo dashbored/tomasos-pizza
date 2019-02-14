@@ -24,15 +24,15 @@
         <div class="jumbotron jumbotron-fluid vertical-center">
             <h1>Tomasos Pizzeria</h1>
         </div>
-        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-lg">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-lg mb-3">
             <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tomasos</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                     aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse justify-content-center">
+            <div class="navbar-collapse">
                 
-                <ul class="navbar-nav">
+                <ul class="navbar-nav navbar-center">
                     <li class="nav-item">
                         <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Pizza</a>
                     </li>
@@ -53,8 +53,6 @@
                     <partial name="_LoginPartial" />
                 </ul>
             </div>
-            @*<div class="navbar-collapse">*@
-            @*</div>*@
 
         </nav>
     </header>

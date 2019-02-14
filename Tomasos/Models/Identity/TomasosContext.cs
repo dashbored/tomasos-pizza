@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Tomasos.Models
+namespace Tomasos.Models.Identity
 {
     public partial class TomasosContext : DbContext
     {
@@ -179,43 +179,28 @@ namespace Tomasos.Models
             {
                 entity.Property(e => e.KundId).HasColumnName("KundID");
 
-                entity.Property(e => e.AnvandarNamn)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Email)
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Gatuadress)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsUnicode(false);
 
                 entity.Property(e => e.IdentityId)
-                    .IsRequired()
                     .HasColumnName("IdentityID")
                     .HasMaxLength(450)
                     .IsUnicode(false);
 
-                entity.Property(e => e.Losenord)
-                    .IsRequired()
-                    .HasMaxLength(20)
-                    .IsUnicode(false);
-
                 entity.Property(e => e.Namn)
-                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Postnr)
-                    .IsRequired()
                     .HasMaxLength(20)
                     .IsUnicode(false);
 
                 entity.Property(e => e.Postort)
-                    .IsRequired()
                     .HasMaxLength(100)
                     .IsUnicode(false);
 
