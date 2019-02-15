@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Tomasos.Data;
 using Tomasos.Models;
 using Tomasos.Models.Identity;
+using Tomasos.Services;
 
 namespace Tomasos
 {
@@ -40,6 +41,7 @@ namespace Tomasos
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddScoped<ITomasosService, TomasosService>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
