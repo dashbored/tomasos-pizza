@@ -10,8 +10,16 @@ namespace Tomasos.Controllers
 {
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult Index(string result)
         {
+            if (result == "Success")
+            {
+                ViewData["Result"] = "Success!";
+            }
+            else if (result == "Failed")
+            {
+                ViewData["Result"] = "Failed";
+            }
             return View();
         }
 

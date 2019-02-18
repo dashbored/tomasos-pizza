@@ -10,6 +10,6 @@ namespace Tomasos.Services
     {
         Task<Kund> GetCustomerAsync(string id);
         Task<bool> UpdateCustomerAsync(Kund customer);
-        bool AddNewCustomer(Kund customer);
+        Task<bool> AddNewCustomerAsync(Kund customer);
     }
 }

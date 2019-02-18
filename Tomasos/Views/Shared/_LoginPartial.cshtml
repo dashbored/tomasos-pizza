@@ -3,16 +3,26 @@
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
 
+
 @if (SignInManager.IsSignedIn(User))
 {
     if (User.IsInRole("Admin"))
     {
         <li class="nav-item">
-            <a class="nav-link text-light" asp-controller="Admin" asp-action="Index">Admin</a>
+            <a class="nav-link text-light" asp-controller="Admin" asp-action="Index"><i class="material-icons">build</i></a>
+        </li>
+    }
+    if (!User.IsInRole("Admin"))
+    {
+        <li class="nav-item">
+            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="material-icons">shopping_cart</i></a>
         </li>
     }
     <li class="nav-item">
-        <a class="nav-link text-light" asp-controller="Account" asp-action="Manage">Welcome @User.Identity.Name</a>
+        <a class="nav-link text-light" asp-controller="Account" asp-action="Manage"><i class="material-icons">perm_identity</i></a>
+    </li>
+    <li class="nav-item">
+        <span class="navbar-text text-light"> @User.Identity.Name</span>
     </li>
     <li class="nav-item">
         <a class="nav-link text-light" asp-controller="Account" asp-action="Logout">Logout</a>

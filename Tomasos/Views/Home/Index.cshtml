@@ -7,9 +7,24 @@
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
 </div>
 
-@if (ViewData["Success"] != null)
+@if (ViewData["Result"] != null)
 {
-    <div class="alert alert-success" role="alert">
-        This is a success alert—check it out!
-    </div>
+    if (ViewData["Result"].ToString() == "Success!")
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            Successfully updated user information!
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            Failed to update user information.
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
 }

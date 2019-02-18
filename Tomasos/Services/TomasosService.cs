@@ -27,23 +27,27 @@ namespace Tomasos.Services
 
         public async Task<bool> UpdateCustomerAsync(Kund customer)
         {
-            var existingCustomer = await (from cust in _context.Kund
-                                          where cust.IdentityId == customer.IdentityId
-                                          select cust).SingleOrDefaultAsync() ?? new Kund();
+            var getCustResult = await (from cust in _context.Kund
+                                       where cust.IdentityId == customer.IdentityId
+                                       select cust).SingleOrDefaultAsync();
 
-            
+            if (getCustResult == null)
+            {
+                return false;
+            }
+
 
             var result = await _context.SaveChangesAsync();
 
             return await Task.FromResult(result == 1);
         }
 
-        public bool AddNewCustomer(Kund customer)
+        public async Task<bool> AddNewCustomerAsync(Kund customer)
         {
             _context.Kund.Add(customer);
-            var result = _context.SaveChanges();
+            var result = await _context.SaveChangesAsync();
 
-            return result == 1;
+            return await Task.FromResult(result == 1);
         }
     }
 }

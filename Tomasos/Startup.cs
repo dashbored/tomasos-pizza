@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Tomasos.BusinessLayer;
 using Tomasos.Data;
 using Tomasos.Models;
 using Tomasos.Models.Identity;
@@ -42,11 +43,14 @@ namespace Tomasos
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.AddScoped<ITomasosService, TomasosService>();
+            services.AddSingleton<IUserRepository, UserRepository>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {
                     options.Password.RequireDigit = false;
                     options.Password.RequireUppercase = false;
+
+                    options.User.RequireUniqueEmail = true;
                 }).AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();
 
@@ -54,7 +58,7 @@ namespace Tomasos
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serv)
         {
             if (env.IsDevelopment())
             {
@@ -78,6 +82,35 @@ namespace Tomasos
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            CreateUserRoles(serv).Wait();
+        }
+
+        private async Task CreateUserRoles(IServiceProvider serv)
+        {
+            var roleManager = serv.GetRequiredService<RoleManager<IdentityRole>>();
+            var userManger = serv.GetRequiredService<UserManager<ApplicationUser>>();
+
+            IdentityResult roleResult;
+
+            string[] roles = { "Admin", "PremiumUser", "RegularUser"};
+
+            foreach (var role in roles)
+            {
+                var roleCheck = await roleManager.RoleExistsAsync(role);
+                if (!roleCheck)
+                {
+                    roleResult = await roleManager.CreateAsync(new IdentityRole(role));
+                    if (!roleResult.Succeeded)
+                    {
+                        throw new Exception(roleResult.Errors.First().ToString());
+                    }
+                }
+
+                ApplicationUser user = await userManger.FindByEmailAsync("admin@local.test");
+
+                await userManger.AddToRoleAsync(user, "Admin");
+            }
         }
     }
 }

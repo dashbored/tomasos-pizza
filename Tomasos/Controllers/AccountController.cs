@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Tomasos.BusinessLayer;
 using Tomasos.Data;
 using Tomasos.Models;
 using Tomasos.Models.AccountViewModels;
@@ -22,17 +23,20 @@ namespace Tomasos.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger _logger;
         private readonly ITomasosService _dbService;
+        private readonly IUserRepository _userRepository;
 
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger,
-            ITomasosService dbService)
+            ITomasosService dbService,
+            IUserRepository userRepository)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _dbService = dbService;
+            _userRepository = userRepository;
         }
 
         [HttpGet]
@@ -142,7 +146,7 @@ namespace Tomasos.Controllers
             }
             else
             {
-                model = UpdateModel(customer, model);
+                model = _userRepository.UpdateModel(customer, model);
 
             }
 
@@ -162,13 +166,13 @@ namespace Tomasos.Controllers
                 }
 
                 var customer = await _dbService.GetCustomerAsync(currentUser.Id);
-
+                bool result;
                 if (customer == null)
                 {
                     customer = new Kund();
-                    UpdateCustomer(customer, model);
-                    var successAddNewCustomer = _dbService.AddNewCustomer(customer);
-                    if (successAddNewCustomer == false)
+                    _userRepository.UpdateCustomer(customer, model);
+                    result = await _dbService.AddNewCustomerAsync(customer);
+                    if (result == false)
                     {
                         _logger.LogWarning("Could not create new customerinfo");
                         return RedirectToAction("Index", "Home");
@@ -176,10 +180,10 @@ namespace Tomasos.Controllers
                 }
                 else
                 {
-                    UpdateCustomer(customer, model);
+                    _userRepository.UpdateCustomer(customer, model);
+                    result = await _dbService.UpdateCustomerAsync(customer);
                 }
 
-                var result = await _dbService.UpdateCustomerAsync(customer);
                 if (result == false)
                 {
                     ViewData["Success"] = "Failed";
@@ -189,40 +193,16 @@ namespace Tomasos.Controllers
                     ViewData["Success"] = "Account updated";
                 }
 
-                return RedirectToAction("Index", "Home");
+                var message = result ? "Success" : "Failed";
+                return RedirectToAction("Index", "Home", new { result = message });
             }
 
 
 
-            return View("Login");
+            return View(model);
         }
 
-        private ManageViewModel UpdateModel(Kund customer, ManageViewModel model)
-        {
-            model.FirstName = customer.Namn.Split(' ').First();
-            model.LastName = customer.Namn.Split(' ').Last();
-            model.StreetAddress = customer.Gatuadress;
-            model.PostNumber = customer.Postnr;
-            model.PostArea = customer.Postort;
-            model.PhoneNumber = customer.Telefon;
-            model.IdentityId = customer.IdentityId;
-
-            return model;
-        }
-
-        private Kund UpdateCustomer(Kund customer, ManageViewModel model)
-        {
-            customer.Namn = model.FirstName + " " + model.LastName;
-            customer.Gatuadress = model.StreetAddress;
-            customer.Postnr = model.PostNumber;
-            customer.Postort = model.PostArea;
-            customer.Telefon = model.PhoneNumber;
-            customer.IdentityId = model.IdentityId;
-            customer.Email = model.Email;
-            return customer;
-        }
-
-        private void AddErrors(IdentityResult result)
+        public void AddErrors(IdentityResult result)
         {
             foreach (var error in result.Errors)
             {
