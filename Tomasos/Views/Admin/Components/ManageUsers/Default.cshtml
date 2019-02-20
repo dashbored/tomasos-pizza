@@ -1,0 +1,41 @@
+﻿@model Tomasos.Models.AdminViewModels.AdminViewModel
+
+<div class="panel panel-default todo-panel toggle">
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <td>User Name</td>
+                <td>Admin user</td>
+                <td>Premium user</td>
+                <td>Standard user</td>
+            </tr>
+        </thead>
+
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.User.UserName</td>
+                <td>
+                    <form asp-action="MarkAdmin" method="post">
+                        <input type="checkbox" class="done-checkbox" asp-for="@user.IsAdmin">
+                        <input type="hidden" name="id" value="@user.User.Id">
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="MarkPremium" method="post">
+                        <input type="checkbox" class="done-checkbox" asp-for="@user.IsPremium">
+                        <input type="hidden" name="id" value="@user.User.Id">
+                    </form>
+                </td>
+                <td>
+                    <form asp-action="MarkRegular" method="post">
+                        <input type="checkbox" class="done-checkbox" asp-for="@user.IsRegular">
+                        <input type="hidden" name="id" value="@user.User.Id">
+                    </form>
+                </td>
+            </tr>
+        }
+    </table>
+
+</div>

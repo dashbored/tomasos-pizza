@@ -49,5 +49,11 @@ namespace Tomasos.Services
 
             return await Task.FromResult(result == 1);
         }
+
+        public async Task<List<AspNetUsers>> GetAllUsersAsync()
+        {
+            return await (from u in _context.AspNetUsers
+                          select u).ToListAsync();
+        }
     }
 }

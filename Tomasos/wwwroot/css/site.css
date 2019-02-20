@@ -94,3 +94,7 @@ a.navbar-brand {
     left: 50%;
     transform: translatex(-50%);
 }
+
+.margin-zero {
+    margin-bottom: 0;
+}

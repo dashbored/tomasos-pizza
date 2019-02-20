@@ -64,14 +64,21 @@ namespace Tomasos.Controllers
                 };
 
                 var result = await _userManager.CreateAsync(user, model.Password);
+
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password");
                     await _signInManager.SignInAsync(user, false);
                     _logger.LogInformation("User logged in a new account with password");
-                    return RedirectToAction("Manage", "Account");
                 }
                 AddErrors(result);
+
+                result = await _userManager.AddToRoleAsync(user, "RegularUser");
+                if (result.Succeeded)
+                {
+                    _logger.LogInformation("Added regular role to user");
+                    return RedirectToAction("Manage", "Account");
+                }
 
             }
 

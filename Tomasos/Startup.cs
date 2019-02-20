@@ -107,9 +107,13 @@ namespace Tomasos
                     }
                 }
 
-                ApplicationUser user = await userManger.FindByEmailAsync("admin@local.test");
+                ApplicationUser adminUser = await userManger.FindByEmailAsync("admin@local.test");
+                ApplicationUser premiumUser = await userManger.FindByEmailAsync("premium@local.test");
+                ApplicationUser regularUser = await userManger.FindByEmailAsync("user@local.test");
 
-                await userManger.AddToRoleAsync(user, "Admin");
+                await userManger.AddToRoleAsync(adminUser, "Admin");
+                await userManger.AddToRoleAsync(premiumUser, "PremiumUser");
+                await userManger.AddToRoleAsync(regularUser, "RegularUser");
             }
         }
     }
