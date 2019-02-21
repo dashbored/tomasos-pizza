@@ -9,9 +9,6 @@ namespace Tomasos.Models.AdminViewModels
 {
     public class AdminViewModel
     {
-
         public List<UserViewModel> Users { get; set; }
-
-
     }
 }

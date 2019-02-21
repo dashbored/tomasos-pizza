@@ -64,3 +64,4 @@ C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp
 C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Account\Manage.g.cshtml.cs
 C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Admin\Index.g.cshtml.cs
 C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Admin\Components\ManageUsers\Default.g.cshtml.cs
+C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Cart\Menu.g.cshtml.cs

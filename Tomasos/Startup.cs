@@ -44,6 +44,7 @@ namespace Tomasos
 
             services.AddScoped<ITomasosService, TomasosService>();
             services.AddSingleton<IUserRepository, UserRepository>();
+            services.AddScoped<ICartRepository, CartRepository>();
 
             services.AddIdentity<ApplicationUser, IdentityRole>(options =>
                 {

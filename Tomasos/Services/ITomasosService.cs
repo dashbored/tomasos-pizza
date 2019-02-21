@@ -12,5 +12,8 @@ namespace Tomasos.Services
         Task<bool> UpdateCustomerAsync(Kund customer);
         Task<bool> AddNewCustomerAsync(Kund customer);
         Task<List<AspNetUsers>> GetAllUsersAsync();
+        Task<List<Matratt>> GetDishesAsync();
+        Task<Matratt> GetDishAsync(int id);
+        Task<List<Produkt>> GetIngredientsAsync(int id);
     }
 }

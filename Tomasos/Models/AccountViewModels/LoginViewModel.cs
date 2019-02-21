@@ -13,7 +13,7 @@ namespace Tomasos.Models.AccountViewModels
         public string Email { get; set; }
 
         [Required]
-        [DataType(DataType.Password)]
+        [DataType(DataType.Password, ErrorMessage = "Wrong email or password.")]
         public string Password { get; set; }
 
         [Display(Name = "Remember me?")]

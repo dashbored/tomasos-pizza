@@ -55,5 +55,41 @@ namespace Tomasos.Services
             return await (from u in _context.AspNetUsers
                           select u).ToListAsync();
         }
+
+        public async Task<List<Matratt>> GetDishesAsync()
+        {
+            return await (from dish in _context.Matratt
+                          select dish).ToListAsync();
+        }
+
+        public async Task<Matratt> GetDishAsync(int id)
+        {
+            return await (from dish in _context.Matratt
+                          where dish.MatrattId == id
+                          select dish).FirstOrDefaultAsync();
+        }
+
+        public async Task<List<Produkt>> GetIngredientsAsync(int id)
+        {
+            var ingredientIds = await (from ingredient in _context.MatrattProdukt
+                                       where ingredient.MatrattId == id
+                                       select ingredient).ToListAsync();
+            if (ingredientIds.Count == 0)
+            {
+                return new List<Produkt>();
+            } 
+
+            var ingredients = new List<Produkt>();
+            foreach (var ingredient in ingredientIds)
+            {
+                var dishIngredient = await (from ing in _context.Produkt
+                                            where ing.ProduktId == ingredient.ProduktId
+                                            select ing).FirstOrDefaultAsync();
+
+                ingredients.Add(dishIngredient);
+            }
+
+            return ingredients;
+        }
     }
 }
