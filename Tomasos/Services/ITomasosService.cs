@@ -14,6 +14,6 @@ namespace Tomasos.Services
         Task<List<AspNetUsers>> GetAllUsersAsync();
         Task<List<Matratt>> GetDishesAsync();
         Task<Matratt> GetDishAsync(int id);
-        Task<List<Produkt>> GetIngredientsAsync(int id);
+        Task<List<Produkt>> GetIngredientsAsync(int matrattId);
     }
 }

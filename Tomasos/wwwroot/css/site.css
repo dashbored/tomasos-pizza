@@ -74,6 +74,19 @@ body {
     align-items: center;
 }
 
+.vertical-center-li {
+    display: flex;
+    align-items: center;
+}
+
+.float-left-li {
+    float: left;
+}
+
+.float-right-li {
+    float: right;
+}
+
 .jumbotron h1 {
     color: whitesmoke;
     font-size: 5rem;
@@ -97,4 +110,31 @@ a.navbar-brand {
 
 .margin-zero {
     margin-bottom: 0;
+}
+
+.column-right {
+    flex: 0 0 352px;
+    position: relative;
+    box-shadow: 2px 0 28px 0 rgba(0, 0, 0, 0.12);
+     
+}
+
+.column-menu {
+    flex: 1 1 auto;
+}
+
+.main {
+    display: flex;
+    width: 100%;
+    /*padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;*/
+}
+
+.cart-container {
+    position: relative;
+    float: left;
+    width: 100%;
+    padding: 12px 12px;
 }

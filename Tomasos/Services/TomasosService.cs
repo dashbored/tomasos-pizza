@@ -59,35 +59,49 @@ namespace Tomasos.Services
         public async Task<List<Matratt>> GetDishesAsync()
         {
             return await (from dish in _context.Matratt
-                          select dish).ToListAsync();
+                          select dish)
+                .Include(e => e.MatrattTypNavigation)
+                .Include(e => e.MatrattProdukt)
+                .ThenInclude(e => e.Produkt).ToListAsync();
         }
 
-        public async Task<Matratt> GetDishAsync(int id)
+        public async Task<Matratt> GetDishAsync(int matrattId)
         {
             return await (from dish in _context.Matratt
-                          where dish.MatrattId == id
-                          select dish).FirstOrDefaultAsync();
+                          where dish.MatrattId == matrattId
+                          select dish)
+                .Include(e => e.MatrattTypNavigation)
+                .Include(e => e.MatrattProdukt)
+                .ThenInclude(e => e.Produkt)
+                .FirstOrDefaultAsync();
         }
 
-        public async Task<List<Produkt>> GetIngredientsAsync(int id)
+        public async Task<List<Produkt>> GetIngredientsAsync(int matrattId)
         {
-            var ingredientIds = await (from ingredient in _context.MatrattProdukt
-                                       where ingredient.MatrattId == id
-                                       select ingredient).ToListAsync();
-            if (ingredientIds.Count == 0)
-            {
-                return new List<Produkt>();
-            } 
+            //var ingredientIds = await (from ingredient in _context.MatrattProdukt
+            //                           where ingredient.MatrattId == matrattId
+            //                           select ingredient).ToListAsync();
+            //if (ingredientIds.Count == 0)
+            //{
+            //    return new List<Produkt>();
+            //} 
 
-            var ingredients = new List<Produkt>();
-            foreach (var ingredient in ingredientIds)
-            {
-                var dishIngredient = await (from ing in _context.Produkt
-                                            where ing.ProduktId == ingredient.ProduktId
-                                            select ing).FirstOrDefaultAsync();
+            //var ingredients = new List<Produkt>();
+            //foreach (var ingredient in ingredientIds)
+            //{
+            //    var dishIngredient = await (from ing in _context.Produkt
+            //                                where ing.ProduktId == ingredient.ProduktId
+            //                                select ing).FirstOrDefaultAsync();
 
-                ingredients.Add(dishIngredient);
-            }
+            //    ingredients.Add(dishIngredient);
+            //}
+            
+            var dish = await _context.Matratt.Where(e => e.MatrattId == matrattId)
+                .Include(e => e.MatrattProdukt)
+                .ThenInclude(e => e.Produkt)
+                .FirstOrDefaultAsync();
+
+            var ingredients = dish.MatrattProdukt.Select(e => e.Produkt).ToList();
 
             return ingredients;
         }

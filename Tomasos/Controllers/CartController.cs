@@ -20,7 +20,7 @@ namespace Tomasos.Controllers
         public async Task<IActionResult> Menu()
         {
             var model = await _cart.GetMenuAsync();
-            return View();
+            return View(model);
         }
     }
 }

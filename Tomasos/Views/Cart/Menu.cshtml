@@ -1,7 +1,63 @@
-﻿
+﻿@model Tomasos.Models.CartViewModels.MenuViewModel
 @{
     ViewData["Title"] = "Menu";
 }
+<div class="main">
+    <section class="column-menu mt-3">
+        <h1 class="text-center display-4">Pizza</h1>
+        <ul class="list-group list-group-flush">
+            @foreach (var pizza in Model.Pizzas)
+            {
+                <li class="list-group-item vertical-center-li justify-content-between">
+                    <div class="align-content-start">
+                        <h3>@pizza.Name</h3>
+                        @pizza.IngredientsString
+                    </div>
+                    <div class="align-content-end">
+                        <span class="align-content-end">test</span>
+                    </div>
+                </li>
+            }
+        </ul>
 
-<h1>Menu</h1>
 
+        <br />
+        <br />
+        <h1 class="text-center display-4">Sallad</h1>
+        <ul class="list-group list-group-flush">
+            @foreach (var sallad in Model.Sallads)
+            {
+                <li class="list-group-item vertical-center-li justify-content-between">
+                    <div class="align-content-start">
+                        <h3>@sallad.Name</h3>
+                        @sallad.IngredientsString
+                    </div>
+                    <div class="align-content-end">
+                        <span class="align-content-end">test</span>
+                    </div>
+                </li>
+            }
+        </ul>
+
+        <br />
+        <br />
+        <h1 class="text-center display-4">Pasta</h1>
+        <ul class="list-group list-group-flush">
+            @foreach (var pasta in Model.Pasta)
+            {
+                <li class="list-group-item vertical-center-li justify-content-between">
+                    <div class="align-content-start">
+                        <h3>@pasta.Name</h3>
+                        @pasta.IngredientsString
+                    </div>
+                    <div class="align-content-end">
+                        <span class="align-content-end">test</span>
+                    </div>
+                </li>
+            }
+        </ul>
+    </section>
+    <section class="column-right">
+        <div class="cart-container">blah</div>
+    </section>
+</div>

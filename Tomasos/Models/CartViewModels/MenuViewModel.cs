@@ -8,10 +8,17 @@ namespace Tomasos.Models.CartViewModels
 {
     public class MenuViewModel
     {
-        public List<Matratt> Pizzas { get; set; }
+        public List<Dish> Pizzas { get; set; }
 
-        public List<Matratt> Sallads { get; set; }
+        public List<Dish> Sallads { get; set; }
 
-        public List<Matratt> Pasta { get; set; }
+        public List<Dish> Pasta { get; set; }
+
+        public MenuViewModel()
+        {
+            Pizzas = new List<Dish>();
+            Sallads = new List<Dish>();
+            Pasta = new List<Dish>();
+        }
     }
 }

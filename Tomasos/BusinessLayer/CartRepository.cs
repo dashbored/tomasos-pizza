@@ -17,13 +17,41 @@ namespace Tomasos.BusinessLayer
 
         public async Task<MenuViewModel> GetMenuAsync()
         {
+            var model = new MenuViewModel();
+            
             var dishes =  await _dbService.GetDishesAsync();
-            foreach (var dish in dishes)
+            foreach (var d in dishes)
             {
-                var ingredients = await _dbService.GetIngredientsAsync(dish.MatrattId);
-                
+                var dish = new Dish
+                {
+                    Name = d.MatrattNamn,
+                    Description = d.Beskrivning,
+                    DishId = d.MatrattId,
+                    DishType = d.MatrattTypNavigation.Beskrivning,
+                    Price = d.Pris
+                };
+
+                var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
+                foreach (var ingredient in ingredients)
+                {
+                    dish.IngredientsList.Add(ingredient.ProduktNamn);
+                }
+
+                dish.IngredientsString = string.Join(", ", dish.IngredientsList);
+
+                if (dish.DishType == "Pizza")
+                {
+                    model.Pizzas.Add(dish);
+                } else if (dish.DishType == "Sallad")
+                {
+                    model.Sallads.Add(dish);
+                }
+                else if (dish.DishType == "Pasta")
+                {
+                    model.Pasta.Add(dish);
+                }
             }
-            return new MenuViewModel();
+            return model;
         }
     }
 }
