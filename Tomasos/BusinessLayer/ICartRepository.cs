@@ -10,5 +10,6 @@ namespace Tomasos.BusinessLayer
     public interface ICartRepository
     {
         Task<MenuViewModel> GetMenuAsync();
+        Task<Matratt> GetDish(int dishId);
     }
 }

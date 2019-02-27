@@ -138,3 +138,8 @@ a.navbar-brand {
     width: 100%;
     padding: 12px 12px;
 }
+
+.cart-total {
+    padding-top: 16px;
+    border-top: 1px solid;
+}

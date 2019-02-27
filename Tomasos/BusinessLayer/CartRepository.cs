@@ -2,7 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.HPack;
+using Newtonsoft.Json;
 using Tomasos.Models.CartViewModels;
+using Tomasos.Models.Identity;
 using Tomasos.Services;
 
 namespace Tomasos.BusinessLayer
@@ -53,5 +57,13 @@ namespace Tomasos.BusinessLayer
             }
             return model;
         }
+
+        public async Task<Matratt> GetDish(int dishId)
+        {
+            var dish = await _dbService.GetDishAsync(dishId);
+
+            return dish;
+        }
+
     }
 }
