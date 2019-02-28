@@ -12,6 +12,7 @@ namespace Tomasos.Models.CartViewModels
         public string Description { get; set; }
         public int Price { get; set; }
         public string DishType { get; set; }
+        public int Quantity { get; set; }
 
         public List<string> IngredientsList { get; set; }
         public string IngredientsString { get; set; }
@@ -19,6 +20,7 @@ namespace Tomasos.Models.CartViewModels
         public Dish()
         {
             IngredientsList = new List<string>();
+            Quantity = 0;
         }
 
     }

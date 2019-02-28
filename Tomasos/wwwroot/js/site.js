@@ -9,6 +9,22 @@ $(document).ready(function () {
     $('.done-checkbox').on('click', function (e) {
         markCompleted(e.target);
     });
+
+    var wrapCart = $("#cart-order");
+    var wrapNav = $("#navbar");
+
+
+    $(window).on('scroll', function (e) {
+        if ($(window).scrollTop() > 264.5) {
+            wrapCart.addClass("fix-cart");
+            wrapNav.addClass("fixed-top");
+        } else {
+            wrapCart.removeClass("fix-cart");
+            wrapNav.removeClass("fixed-top");
+        }
+    });
+
+
 });
 
 function markCompleted(checkbox) {

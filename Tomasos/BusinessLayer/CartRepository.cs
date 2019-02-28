@@ -26,14 +26,15 @@ namespace Tomasos.BusinessLayer
             var dishes =  await _dbService.GetDishesAsync();
             foreach (var d in dishes)
             {
-                var dish = new Dish
-                {
-                    Name = d.MatrattNamn,
-                    Description = d.Beskrivning,
-                    DishId = d.MatrattId,
-                    DishType = d.MatrattTypNavigation.Beskrivning,
-                    Price = d.Pris
-                };
+                var dish = ConvertMatrattToDish(d);
+                //var dish = new Dish
+                //{
+                //    Name = d.MatrattNamn,
+                //    Description = d.Beskrivning,
+                //    DishId = d.MatrattId,
+                //    DishType = d.MatrattTypNavigation.Beskrivning,
+                //    Price = d.Pris
+                //};
 
                 var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
                 foreach (var ingredient in ingredients)
@@ -58,12 +59,56 @@ namespace Tomasos.BusinessLayer
             return model;
         }
 
-        public async Task<Matratt> GetDish(int dishId)
+        private Dish ConvertMatrattToDish(Matratt matratt)
         {
-            var dish = await _dbService.GetDishAsync(dishId);
+            var dish = new Dish
+            {
+                Name = matratt.MatrattNamn,
+                Description = matratt.Beskrivning,
+                DishId = matratt.MatrattId,
+                DishType = matratt.MatrattTypNavigation.Beskrivning,
+                Price = matratt.Pris
+            };
+            return dish;
+        }
+
+        public async Task<Dish> GetDishAsync(int dishId)
+        {
+            var matratt = await _dbService.GetDishAsync(dishId);
+            var dish = ConvertMatrattToDish(matratt);
 
             return dish;
         }
 
+        public async Task<bool> OrderAsync(List<Dish> orderCart, string id)
+        {
+            var order = new Bestallning();
+            var customer = await _dbService.GetCustomerAsync(id);
+
+            order.Kund = customer;
+            order.BestallningDatum = DateTime.Now;
+            order.KundId = customer.KundId;
+            order.Levererad = false;
+
+            foreach (var dish in orderCart)
+            {
+                var matratt = await _dbService.GetDishAsync(dish.DishId);
+                var orderDetail = new BestallningMatratt()
+                {
+                    Antal = dish.Quantity,
+                    Bestallning = order,
+                    Matratt = matratt,
+                    MatrattId = matratt.MatrattId
+                };
+
+                order.BestallningMatratt.Add(orderDetail);
+            }
+
+            order.Totalbelopp = orderCart.Sum(e => e.Price * e.Quantity);
+
+            _dbService.AddNewOrderAsync(order);
+
+            return await Task.FromResult<bool>(true);
+        }
     }
 }

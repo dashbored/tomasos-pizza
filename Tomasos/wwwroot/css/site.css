@@ -119,6 +119,18 @@ a.navbar-brand {
      
 }
 
+.fix-cart {
+    position: fixed !important;
+    top: 61px;
+    width: 352px !important;
+}
+
+.fix-nav {
+    position: fixed !important;
+    top: 0;
+    
+}
+
 .column-menu {
     flex: 1 1 auto;
 }
@@ -142,4 +154,17 @@ a.navbar-brand {
 .cart-total {
     padding-top: 16px;
     border-top: 1px solid;
+}
+
+.nav-wrapper {
+    height: 61.6px;
+}
+
+.align-content-end {
+    display: inline-flex;
+    vertical-align: middle;
+}
+
+.container-fluid {
+    padding-right: 0;
 }

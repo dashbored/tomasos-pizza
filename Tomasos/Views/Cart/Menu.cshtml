@@ -14,7 +14,21 @@
                         @pizza.IngredientsString
                     </div>
                     <div class="align-content-end">
-                        <span class="align-content-end">test</span>
+                        <span class="align-content-end">
+                            @pizza.Price kr &nbsp;
+                            <a asp-action="CartDetails"
+                               asp-controller="Cart"
+                               asp-route-id="@pizza.DishId"
+                               data-ajax="true"
+                               data-ajax-method="GET"
+                               data-ajax-mode="replace"
+                               data-ajax-update="#cart-order">
+
+                                <i class="material-icons">
+                                    add_shopping_cart
+                                </i>
+                            </a>
+                        </span>
                     </div>
                 </li>
             }
@@ -33,7 +47,21 @@
                         @sallad.IngredientsString
                     </div>
                     <div class="align-content-end">
-                        <span class="align-content-end">test</span>
+                        <span class="align-content-end">
+                            @sallad.Price kr &nbsp;
+                            <a asp-action="CartDetails"
+                               asp-controller="Cart"
+                               asp-route-id="@sallad.DishId"
+                               data-ajax="true"
+                               data-ajax-method="GET"
+                               data-ajax-mode="replace"
+                               data-ajax-update="#cart-order">
+
+                                <i class="material-icons">
+                                    add_shopping_cart
+                                </i>
+                            </a>
+                        </span>
                     </div>
                 </li>
             }
@@ -52,13 +80,19 @@
                     </div>
                     <div class="align-content-end">
                         <span class="align-content-end">
+                            @pasta.Price kr &nbsp;
                             <a asp-action="CartDetails"
                                asp-controller="Cart"
                                asp-route-id="@pasta.DishId"
                                data-ajax="true"
                                data-ajax-method="GET"
                                data-ajax-mode="replace"
-                               data-ajax-update="#cart-order">Buy</a>
+                               data-ajax-update="#cart-order">
+
+                                <i class="material-icons">
+                                    add_shopping_cart
+                                </i>
+                            </a>
                         </span>
                     </div>
                 </li>
@@ -70,17 +104,24 @@
             <div class="text-center">
                 <h3>Your cart</h3>
             </div>
-            <div  class="my-3">
-                <div class="my-2">Your cart is currently empty.</div>
-                <div class="cart-total">
-                    Total:
-                    <div class="float-right">0 kr</div>
+            <div class="my-2 container">
+                <div class="row justify-content-center">
+                    <div class="col text-center">
+                        Your cart is currently empty.
+                    </div>
+                    <br />
                 </div>
             </div>
+            <div class="cart-total container my-2">
+                <div class="row justify-content-between">
+                    <div class="col-9">Total:</div>
+                    <div class="col">0 kr</div>
+                </div>
+            </div>
+
             <div class="text-center">
-                <button type="button" class="btn btn-lg btn-primary btn-block" disabled>Buy</button>
+                <a class="btn btn-lg btn-primary btn-block disabled" aria-disabled="true">Buy</a>
             </div>
         </div>
-
     </section>
 </div>

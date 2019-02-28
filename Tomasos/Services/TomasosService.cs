@@ -50,6 +50,14 @@ namespace Tomasos.Services
             return await Task.FromResult(result == 1);
         }
 
+        public async Task<bool> AddNewOrderAsync(Bestallning order)
+        {
+            _context.Bestallning.Add(order);
+            var result = await _context.SaveChangesAsync();
+
+            return await Task.FromResult(result > 0);
+        }
+
         public async Task<List<AspNetUsers>> GetAllUsersAsync()
         {
             return await (from u in _context.AspNetUsers
