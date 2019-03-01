@@ -20,7 +20,7 @@ namespace Tomasos.Controllers
     {
         private readonly ICartRepository _cart;
         private readonly UserManager<ApplicationUser> _userManager;
-        
+
         public CartController(ICartRepository cart, UserManager<ApplicationUser> userManager)
         {
             _cart = cart;
@@ -73,17 +73,23 @@ namespace Tomasos.Controllers
 
         public async Task<IActionResult> Order()
         {
-            var sessionCart = HttpContext.Session.GetString("cart");
-            var cart = JsonConvert.DeserializeObject<List<Dish>>(sessionCart);
+            if (HttpContext.Session.GetString("cart") != null)
+            {
 
-            var userId = _userManager.GetUserId(User);
-            var result = await _cart.OrderAsync(cart, userId);
+                var sessionCart = HttpContext.Session.GetString("cart");
+                var cart = JsonConvert.DeserializeObject<List<Dish>>(sessionCart);
+
+                var userId = _userManager.GetUserId(User);
+                var result = await _cart.OrderAsync(cart, userId);
+
+                HttpContext.Session.Remove("cart");
+            }
 
             return View();
 
         }
 
-        public async Task<IActionResult> Remove(int id)
+        public IActionResult Remove(int id)
         {
             var sessionCart = HttpContext.Session.GetString("cart");
             var cart = JsonConvert.DeserializeObject<List<Dish>>(sessionCart);

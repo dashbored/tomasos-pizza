@@ -8,5 +8,9 @@ namespace Tomasos.Data
 {
     public class ApplicationUser : IdentityUser
     {
+        public bool IsAdmin { get; set; }
+        public bool IsPremium { get; set; }
+        public bool IsRegular { get; set; }
+        public int BonusPoints { get; set; }
     }
 }

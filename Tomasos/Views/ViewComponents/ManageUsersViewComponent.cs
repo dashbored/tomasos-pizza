@@ -38,33 +38,37 @@ namespace Tomasos.Views.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var model = new AdminViewModel { Users = new List<UserViewModel>() };
+            var model = new AdminViewModel { Users = new List<ApplicationUser>() };
             var users = await _userManager.Users.ToListAsync();
             foreach (var applicationUser in users)
             {
-                var user = new UserViewModel { User = applicationUser };
+                //var user = new UserViewModel { User = applicationUser };
                 var roles = await _userManager.GetRolesAsync(applicationUser);
                 foreach (var role in roles)
                 {
                     if (role == "Admin")
                     {
-                        user.IsAdmin = true;
+                        applicationUser.IsAdmin = true;
+                        //user.IsAdmin = true;
                     }
                     else if (role == "PremiumUser")
                     {
-                        user.IsPremium = true;
+                        applicationUser.IsPremium = true;
+                        //user.IsPremium = true;
                     }
                     else if (role == "RegularUser")
                     {
-                        user.IsRegular = true;
+                        applicationUser.IsRegular = true;
+                        //user.IsRegular = true;
                     }
                 }
-                user.Roles = roles.ToList();
-                model.Users.Add(user);
+                //user.Roles = roles.ToList();
+                model.Users.Add(applicationUser);
 
             }
 
             return View(model);
+            
         }
 
     }

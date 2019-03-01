@@ -39,33 +39,37 @@ namespace Tomasos.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = new AdminViewModel { Users = new List<UserViewModel>() };
-            var users = await _userManager.Users.ToListAsync();
-            foreach (var applicationUser in users)
-            {
-                var user = new UserViewModel { User = applicationUser };
-                var roles = await _userManager.GetRolesAsync(applicationUser);
-                foreach (var role in roles)
-                {
-                    if (role == "Admin")
-                    {
-                        user.IsAdmin = true;
-                    }
-                    else if (role == "PremiumUser")
-                    {
-                        user.IsPremium = true;
-                    }
-                    else if (role == "RegularUser")
-                    {
-                        user.IsRegular = true;
-                    }
-                }
-                user.Roles = roles.ToList();
-                model.Users.Add(user);
+            //var model = new AdminViewModel { Users = new List<UserViewModel>() };
+            //var users = await _userManager.Users.ToListAsync();
+            //foreach (var applicationUser in users)
+            //{
+            //    var user = new UserViewModel { User = applicationUser };
+            //    var roles = await _userManager.GetRolesAsync(applicationUser);
+            //    foreach (var role in roles)
+            //    {
+            //        if (role == "Admin")
+            //        {
+            //            applicationUser.IsAdmin = true;
+            //           // user.IsAdmin = true;
+            //        }
+            //        else if (role == "PremiumUser")
+            //        {
+            //            applicationUser.IsPremium = true;
+            //           // user.IsPremium = true;
+            //        }
+            //        else if (role == "RegularUser")
+            //        {
+            //            applicationUser.IsRegular = true;
+            //           // user.IsRegular = true;
+            //        }
+            //    }
+            //    //user.Roles = roles.ToList();
+            //    model.Users.Add(user);
 
-            }
+            //}
 
-            return View(model);
+            //return View(model);
+            return View();
         }
 
         [ValidateAntiForgeryToken]
@@ -77,10 +81,16 @@ namespace Tomasos.Controllers
             if (!roles.Contains("Admin"))
             {
                 if (roles.Contains("PremiumUser"))
+                {
                     await _userManager.RemoveFromRoleAsync(user, "PremiumUser");
+                    user.IsPremium = false;
+                }
 
                 if (roles.Contains("RegularUser"))
+                {
                     await _userManager.RemoveFromRoleAsync(user, "RegularUser");
+                    user.IsRegular = false;
+                }
 
                 await _userManager.AddToRoleAsync(user, "Admin");
             }
@@ -97,12 +107,20 @@ namespace Tomasos.Controllers
             if (!roles.Contains("PremiumUser"))
             {
                 if (roles.Contains("Admin"))
+                {
                     await _userManager.RemoveFromRoleAsync(user, "Admin");
+                    user.IsAdmin = false;
+                }
+
 
                 if (roles.Contains("RegularUser"))
+                {
                     await _userManager.RemoveFromRoleAsync(user, "RegularUser");
+                    user.IsRegular = false;
+                }
 
                 await _userManager.AddToRoleAsync(user, "PremiumUser");
+
             }
 
             return View("Index");
@@ -118,10 +136,16 @@ namespace Tomasos.Controllers
             if (!roles.Contains("RegularUser"))
             {
                 if (roles.Contains("Admin"))
+                {
                     await _userManager.RemoveFromRoleAsync(user, "Admin");
+                    user.IsAdmin = false;
+                }
 
                 if (roles.Contains("PremiumUser"))
+                {
                     await _userManager.RemoveFromRoleAsync(user, "PremiumUser");
+                    user.IsPremium = false;
+                }
 
                 await _userManager.AddToRoleAsync(user, "RegularUser");
             }

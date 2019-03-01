@@ -12,12 +12,6 @@
             <a class="nav-link text-light" asp-controller="Admin" asp-action="Index"><i class="material-icons margin-zero">build</i></a>
         </li>
     }
-    if (!User.IsInRole("Admin"))
-    {
-        <li class="nav-item">
-            <a class="nav-link text-light margin-zero" asp-area="" asp-controller="Home" asp-action="Privacy"><i class="material-icons">shopping_cart</i></a>
-        </li>
-    }
     <li class="nav-item">
         <a class="nav-link text-light margin-zero" asp-controller="Account" asp-action="Manage"><i class="material-icons">perm_identity</i></a>
     </li>
