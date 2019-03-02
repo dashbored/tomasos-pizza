@@ -93,6 +93,7 @@ namespace Tomasos.Controllers
                 }
 
                 await _userManager.AddToRoleAsync(user, "Admin");
+                user.IsAdmin = true;
             }
 
             return View("Index");
@@ -120,6 +121,7 @@ namespace Tomasos.Controllers
                 }
 
                 await _userManager.AddToRoleAsync(user, "PremiumUser");
+                user.IsPremium = true;
 
             }
 
@@ -148,9 +150,15 @@ namespace Tomasos.Controllers
                 }
 
                 await _userManager.AddToRoleAsync(user, "RegularUser");
+                user.IsRegular = true;
             }
 
             return View("Index");
+        }
+
+        public IActionResult ManageUsersViewComponent()
+        {
+            return ViewComponent("ManageUsersViewComponent");
         }
     }
 }

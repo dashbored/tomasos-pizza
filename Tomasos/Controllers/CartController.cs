@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGeneration.DotNet;
 using Newtonsoft.Json;
 using Tomasos.BusinessLayer;
 using Tomasos.Data;
@@ -25,6 +26,7 @@ namespace Tomasos.Controllers
         {
             _cart = cart;
             _userManager = userManager;
+
         }
         public async Task<IActionResult> Menu()
         {
@@ -37,6 +39,8 @@ namespace Tomasos.Controllers
         public async Task<IActionResult> CartDetails(int id)
         {
             List<Dish> cart;
+            var result = _userManager.GetUserAsync(User).Result;
+            var roles = await _userManager.GetRolesAsync(result);
 
             if (HttpContext.Session.GetString("cart") == null)
             {
@@ -67,8 +71,10 @@ namespace Tomasos.Controllers
 
             HttpContext.Session.SetString("cart", jsonCart);
 
+            var model = _cart.CreateViewModel(cart, result);
 
-            return PartialView("_CartPartial", cart);
+
+            return PartialView("_CartPartial", model);
         }
 
         public async Task<IActionResult> Order()
@@ -78,9 +84,10 @@ namespace Tomasos.Controllers
 
                 var sessionCart = HttpContext.Session.GetString("cart");
                 var cart = JsonConvert.DeserializeObject<List<Dish>>(sessionCart);
+                var user = _userManager.GetUserAsync(User).Result;
 
-                var userId = _userManager.GetUserId(User);
-                var result = await _cart.OrderAsync(cart, userId);
+                var model = _cart.CreateViewModel(cart, user);
+                var result = await _cart.OrderAsync(model, user);
 
                 HttpContext.Session.Remove("cart");
             }
@@ -110,7 +117,8 @@ namespace Tomasos.Controllers
 
             HttpContext.Session.SetString("cart", jsonCart);
 
-            return PartialView("_CartPartial", cart);
+            var model = _cart.CreateViewModel(cart, _userManager.GetUserAsync(User).Result);
+            return PartialView("_CartPartial", model);
         }
     }
 }

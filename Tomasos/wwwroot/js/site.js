@@ -28,8 +28,8 @@ $(document).ready(function () {
 });
 
 function markCompleted(checkbox) {
-
+    
     var form = checkbox.closest('form');
-    var value = checkbox.value
+    var value = checkbox.value;
     form.submit();
 }

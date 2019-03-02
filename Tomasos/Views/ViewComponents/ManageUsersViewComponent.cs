@@ -62,6 +62,8 @@ namespace Tomasos.Views.ViewComponents
                         //user.IsRegular = true;
                     }
                 }
+
+                var result = await _userManager.UpdateAsync(applicationUser);
                 //user.Roles = roles.ToList();
                 model.Users.Add(applicationUser);
 

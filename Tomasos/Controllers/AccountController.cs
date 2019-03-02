@@ -76,6 +76,8 @@ namespace Tomasos.Controllers
                 result = await _userManager.AddToRoleAsync(user, "RegularUser");
                 if (result.Succeeded)
                 {
+                    user.IsRegular = true;
+                    
                     _logger.LogInformation("Added regular role to user");
                     return RedirectToAction("Manage", "Account");
                 }

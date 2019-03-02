@@ -26,8 +26,8 @@ namespace Tomasos.BusinessLayer
         public async Task<MenuViewModel> GetMenuAsync()
         {
             var model = new MenuViewModel();
-            
-            var dishes =  await _dbService.GetDishesAsync();
+
+            var dishes = await _dbService.GetDishesAsync();
             foreach (var d in dishes)
             {
                 var dish = ConvertMatrattToDish(d);
@@ -43,7 +43,8 @@ namespace Tomasos.BusinessLayer
                 if (dish.DishType == "Pizza")
                 {
                     model.Pizzas.Add(dish);
-                } else if (dish.DishType == "Sallad")
+                }
+                else if (dish.DishType == "Sallad")
                 {
                     model.Sallads.Add(dish);
                 }
@@ -76,18 +77,31 @@ namespace Tomasos.BusinessLayer
             return dish;
         }
 
-        public async Task<bool> OrderAsync(List<Dish> orderCart, string id)
+        public async Task<bool> OrderAsync(CartViewModel model, ApplicationUser user)
         {
             var order = new Bestallning();
-            var customer = await _dbService.GetCustomerAsync(id);
-            var user = await _userManager.FindByIdAsync(id);
+            var customer = await _dbService.GetCustomerAsync(user.Id);
 
             order.Kund = customer;
             order.BestallningDatum = DateTime.Now;
             order.KundId = customer.KundId;
             order.Levererad = false;
 
-            foreach (var dish in orderCart)
+            if (model.BonusPoints >= 100)
+            {
+                if (model.Dishes.Any(e => e.DishId == 1104))
+                {
+                    model.Dishes.Find(e => e.DishId == 1104).Quantity++;
+                }
+                else
+                {
+                    var dish = await GetDishAsync(1104);
+                    dish.Quantity++;
+                    model.Dishes.Add(dish);
+                }
+            }
+
+            foreach (var dish in model.Dishes)
             {
                 var matratt = await _dbService.GetDishAsync(dish.DishId);
                 var orderDetail = new BestallningMatratt()
@@ -101,24 +115,31 @@ namespace Tomasos.BusinessLayer
                 order.BestallningMatratt.Add(orderDetail);
             }
 
-            if (user.IsPremium)
-            {
-                if (orderCart.Count >= 3)
-                {
-                    order.Totalbelopp = (int)((orderCart.Sum(e => e.Price * e.Quantity) - 70) * 0.8);
-                }
-                else
-                {
-                    order.Totalbelopp = (int)(orderCart.Sum(e => e.Price * e.Quantity) * 0.8);
-                }
-            } else
-            { 
-            order.Totalbelopp = orderCart.Sum(e => e.Price * e.Quantity);
-            }
+            order.Totalbelopp = user.IsPremium ? model.PremiumPrice : model.TotalPrice;
 
             await _dbService.AddNewOrderAsync(order);
 
             return await Task.FromResult<bool>(true);
+        }
+
+        public CartViewModel CreateViewModel(List<Dish> cart, ApplicationUser result)
+        {
+            var model = new CartViewModel
+            {
+                Dishes = cart,
+                TotalPrice = cart.Sum(e => e.Quantity * e.Price),
+                NumberOfItems = cart.Sum(e => e.Quantity)
+            };
+
+            if (result.IsPremium)
+            {
+                model.BonusPoints = result.BonusPoints + cart.Sum(e => e.Quantity) * 10;
+                model.PremiumPrice = model.NumberOfItems >= 3
+                    ? (int)((model.TotalPrice - 70) * 0.8)
+                    : (int)(model.TotalPrice * 0.8);
+            }
+
+            return model;
         }
     }
 }

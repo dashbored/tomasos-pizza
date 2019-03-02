@@ -5,7 +5,10 @@
 <div class="text-center my-3">
     <h1 class="display-4">Welcome to Tomasos Pizzeria</h1>
     <br/>
-    <p>Please log in or create an account and start ordering food!</p>
+    @if (!User.Identity.IsAuthenticated)
+    {
+        <p>Please log in or create an account and start ordering food!</p>
+    }
 </div>
 
 @if (ViewData["Result"] != null)
