@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2.HPack;
 using Newtonsoft.Json;
+using Tomasos.Data;
 using Tomasos.Models.CartViewModels;
 using Tomasos.Models.Identity;
 using Tomasos.Services;
@@ -14,9 +16,11 @@ namespace Tomasos.BusinessLayer
     public class CartRepository : ICartRepository
     {
         private readonly ITomasosService _dbService;
-        public CartRepository(ITomasosService dbService)
+        private readonly UserManager<ApplicationUser> _userManager;
+        public CartRepository(ITomasosService dbService, UserManager<ApplicationUser> userManager)
         {
             _dbService = dbService;
+            _userManager = userManager;
         }
 
         public async Task<MenuViewModel> GetMenuAsync()
@@ -27,14 +31,6 @@ namespace Tomasos.BusinessLayer
             foreach (var d in dishes)
             {
                 var dish = ConvertMatrattToDish(d);
-                //var dish = new Dish
-                //{
-                //    Name = d.MatrattNamn,
-                //    Description = d.Beskrivning,
-                //    DishId = d.MatrattId,
-                //    DishType = d.MatrattTypNavigation.Beskrivning,
-                //    Price = d.Pris
-                //};
 
                 var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
                 foreach (var ingredient in ingredients)
@@ -84,6 +80,7 @@ namespace Tomasos.BusinessLayer
         {
             var order = new Bestallning();
             var customer = await _dbService.GetCustomerAsync(id);
+            var user = await _userManager.FindByIdAsync(id);
 
             order.Kund = customer;
             order.BestallningDatum = DateTime.Now;
@@ -104,9 +101,22 @@ namespace Tomasos.BusinessLayer
                 order.BestallningMatratt.Add(orderDetail);
             }
 
+            if (user.IsPremium)
+            {
+                if (orderCart.Count >= 3)
+                {
+                    order.Totalbelopp = (int)((orderCart.Sum(e => e.Price * e.Quantity) - 70) * 0.8);
+                }
+                else
+                {
+                    order.Totalbelopp = (int)(orderCart.Sum(e => e.Price * e.Quantity) * 0.8);
+                }
+            } else
+            { 
             order.Totalbelopp = orderCart.Sum(e => e.Price * e.Quantity);
+            }
 
-            _dbService.AddNewOrderAsync(order);
+            await _dbService.AddNewOrderAsync(order);
 
             return await Task.FromResult<bool>(true);
         }

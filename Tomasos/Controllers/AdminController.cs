@@ -37,7 +37,7 @@ namespace Tomasos.Controllers
             _userRepository = userRepository;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             //var model = new AdminViewModel { Users = new List<UserViewModel>() };
             //var users = await _userManager.Users.ToListAsync();
