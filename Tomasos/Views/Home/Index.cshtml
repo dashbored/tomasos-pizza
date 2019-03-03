@@ -4,12 +4,24 @@
 
 <div class="text-center my-3">
     <h1 class="display-4">Welcome to Tomasos Pizzeria</h1>
-    <br/>
+    <br />
     @if (!User.Identity.IsAuthenticated)
     {
         <p>Please log in or create an account and start ordering food!</p>
     }
 </div>
+
+@if (TempData["Errors"] != null)
+{
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <p>@TempData.Values.First()</p>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+}
 
 @if (ViewData["Result"] != null)
 {

@@ -164,17 +164,25 @@ namespace Tomasos.Controllers
         [HttpPost]
         public async Task<IActionResult> UpdateDish(Dish dish)
         {
-            if (dish.DishId == 0)
+            if (ModelState.IsValid)
             {
-                var result = await _cart.CreateDishAsync(dish);
-            }
-            else
-            {
-                var result = await _cart.UpdateDishAsync(dish);
+                if (dish.DishId == 0)
+                {
+                    var result = await _cart.CreateDishAsync(dish);
+                }
+                else
+                {
+                    var result = await _cart.UpdateDishAsync(dish);
+                }
+                return View("Index");
             }
 
-
-            return View("Index");
+            foreach (var error in ModelState.SelectMany(e => e.Value.Errors).Select(e => e.ErrorMessage).ToList())
+            {
+                TempData["Errors"] = error;
+            }
+            //TempData["Errors"] = ModelState.SelectMany(e => e.Value.Errors).Select(e => e.ErrorMessage).ToList();
+            return RedirectToAction("Index","Home");
         }
 
         [ValidateAntiForgeryToken]
@@ -184,7 +192,7 @@ namespace Tomasos.Controllers
             var order = await _dbService.GetOrderFromIdAsync(model.BestallningsId);
             order.Levererad = true;
             var result = await _dbService.SaveChangesAsync();
-            return RedirectToAction("Index","Admin");
+            return RedirectToAction("Index", "Admin");
         }
     }
 }
