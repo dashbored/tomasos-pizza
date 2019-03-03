@@ -12,7 +12,6 @@ namespace Tomasos.Models.CartViewModels
 
         [Required(ErrorMessage = "A name is required.")]
         [StringLength(100, ErrorMessage = "The name must be longer than {2} and less than {1}.", MinimumLength = 1)]
-        [RegularExpression("^[a-zA-Z]*$", ErrorMessage = "Please only use letters for the name")]
         public string Name { get; set; }
 
         [Required(ErrorMessage = "A description is required.")]
