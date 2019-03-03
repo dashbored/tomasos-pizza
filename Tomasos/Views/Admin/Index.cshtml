@@ -22,6 +22,8 @@
         <div class="tab-pane fade" id="dishes" role="tabpanel" aria-labelledby="dish-tab">
             @await Component.InvokeAsync("ManageDishes")
         </div>
-        <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">Test profile content</div>
+        <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+            @await Component.InvokeAsync("ManageOrders")
+        </div>
     </div>
 </div>

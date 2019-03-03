@@ -25,18 +25,18 @@ namespace Tomasos.Views.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var model = new CartViewModel();
-            var dishes = await _dbService.GetDishesAsync();
+            var dishes = await _dbService.GetMattraterAsync();
             foreach (var d in dishes)
             {
-                var dish = _cart.ConvertMatrattToDish(d);
+                var dish = await _cart.ConvertMatrattToDishAsync(d);
 
-                var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
-                foreach (var ingredient in ingredients)
-                {
-                    dish.IngredientsList.Add(ingredient.ProduktNamn);
-                }
+                //var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
+                //foreach (var ingredient in ingredients)
+                //{
+                //    dish.IngredientsList.Add(ingredient.ProduktNamn);
+                //}
 
-                dish.IngredientsString = string.Join(", ", dish.IngredientsList);
+                //dish.IngredientsString = string.Join(", ", dish.IngredientsList);
 
                 model.Dishes.Add(dish);
             }

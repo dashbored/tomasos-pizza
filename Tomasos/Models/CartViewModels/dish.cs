@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,13 +9,21 @@ namespace Tomasos.Models.CartViewModels
     public class Dish
     {
         public int DishId { get; set; }
+
+        [Required(ErrorMessage = "A name is required.")]
+        [StringLength(100, ErrorMessage = "The name must be longer than {2} and less than {1}.", MinimumLength = 1)]
+        [RegularExpression("^[a-zA-Z]*$", ErrorMessage = "Please only use letters for the name")]
         public string Name { get; set; }
+
         public string Description { get; set; }
         public int Price { get; set; }
+        [Display(Name = "Type")]
         public string DishType { get; set; }
         public int Quantity { get; set; }
 
         public List<string> IngredientsList { get; set; }
+
+        [Display(Name = "Ingredients")]
         public string IngredientsString { get; set; }
 
         public Dish()

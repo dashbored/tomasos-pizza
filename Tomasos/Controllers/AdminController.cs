@@ -23,53 +23,26 @@ namespace Tomasos.Controllers
         private readonly ILogger _logger;
         private readonly ITomasosService _dbService;
         private readonly IUserRepository _userRepository;
+        private readonly ICartRepository _cart;
 
         public AdminController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             ILogger<AccountController> logger,
             ITomasosService dbService,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ICartRepository cart)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _logger = logger;
             _dbService = dbService;
             _userRepository = userRepository;
+            _cart = cart;
         }
 
         public IActionResult Index()
         {
-            //var model = new AdminViewModel { Users = new List<UserViewModel>() };
-            //var users = await _userManager.Users.ToListAsync();
-            //foreach (var applicationUser in users)
-            //{
-            //    var user = new UserViewModel { User = applicationUser };
-            //    var roles = await _userManager.GetRolesAsync(applicationUser);
-            //    foreach (var role in roles)
-            //    {
-            //        if (role == "Admin")
-            //        {
-            //            applicationUser.IsAdmin = true;
-            //           // user.IsAdmin = true;
-            //        }
-            //        else if (role == "PremiumUser")
-            //        {
-            //            applicationUser.IsPremium = true;
-            //           // user.IsPremium = true;
-            //        }
-            //        else if (role == "RegularUser")
-            //        {
-            //            applicationUser.IsRegular = true;
-            //           // user.IsRegular = true;
-            //        }
-            //    }
-            //    //user.Roles = roles.ToList();
-            //    model.Users.Add(user);
-
-            //}
-
-            //return View(model);
             return View();
         }
 
@@ -165,19 +138,48 @@ namespace Tomasos.Controllers
         //    return ViewComponent("ManageUsersViewComponent");
         //}
 
-        //[HttpGet]
-        //public IActionResult ManageDishesViewComponent()
-        //{
-        //    ViewData["test"] = "blah";
-        //    return ViewComponent("ManageDishes");
-        //}
+
+        public IActionResult ManageDishesViewComponent()
+        {
+            ViewData["test"] = "blah";
+            return ViewComponent("ManageDishes");
+        }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
-        public async Task<IActionResult> ManageDishesViewComponent(CartViewModel model)
+        public async Task<IActionResult> ManageDishesViewComponent(CartViewModel viewModel)
         {
-            await Task.Delay(1);
-            return ViewComponent("ManageDishes");
+            if (viewModel.DishId != 0)
+            {
+                Dish model;
+                if (viewModel.DishId == 1)
+                {
+                    model = new Dish();
+                }
+                else
+                {
+                    model = await _cart.GetDishAsync(viewModel.DishId);
+                }
+                return PartialView("_UpdateDishPartial", model);
+            }
+            return PartialView("_UpdateDishPartial");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> UpdateDish(Dish dish)
+        {
+            if (dish.DishId == 0)
+            {
+                var result = await _cart.CreateDishAsync(dish);
+            }
+            else
+            {
+                var result = await _cart.UpdateDishAsync(dish);
+            }
+
+
+            return View("Index");
         }
     }
 }

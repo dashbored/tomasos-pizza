@@ -27,18 +27,18 @@ namespace Tomasos.BusinessLayer
         {
             var model = new MenuViewModel();
 
-            var dishes = await _dbService.GetDishesAsync();
+            var dishes = await _dbService.GetMattraterAsync();
             foreach (var d in dishes)
             {
-                var dish = ConvertMatrattToDish(d);
+                var dish = await ConvertMatrattToDishAsync(d);
 
-                var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
-                foreach (var ingredient in ingredients)
-                {
-                    dish.IngredientsList.Add(ingredient.ProduktNamn);
-                }
+                //var ingredients = await _dbService.GetIngredientsAsync(d.MatrattId);
+                //foreach (var ingredient in ingredients)
+                //{
+                //    dish.IngredientsList.Add(ingredient.ProduktNamn);
+                //}
 
-                dish.IngredientsString = string.Join(", ", dish.IngredientsList);
+                //dish.IngredientsString = string.Join(", ", dish.IngredientsList);
 
                 if (dish.DishType == "Pizza")
                 {
@@ -56,7 +56,7 @@ namespace Tomasos.BusinessLayer
             return model;
         }
 
-        public Dish ConvertMatrattToDish(Matratt matratt)
+        public async Task<Dish> ConvertMatrattToDishAsync(Matratt matratt)
         {
             var dish = new Dish
             {
@@ -66,13 +66,67 @@ namespace Tomasos.BusinessLayer
                 DishType = matratt.MatrattTypNavigation.Beskrivning,
                 Price = matratt.Pris
             };
+            var ingredients = await _dbService.GetIngredientsAsync(matratt.MatrattId);
+            foreach (var ingredient in ingredients)
+            {
+                dish.IngredientsList.Add(ingredient.ProduktNamn);
+            }
+
+            dish.IngredientsString = string.Join(", ", dish.IngredientsList);
+
             return dish;
+        }
+
+        public async Task<Matratt> ConvertDishToMatrattAsync(Dish dish, Matratt matratt)
+        {
+
+            matratt.MatrattNamn = dish.Name;
+            matratt.Beskrivning = dish.Description;
+            matratt.MatrattTyp = int.Parse(dish.DishType);
+            matratt.Pris = dish.Price;
+
+            var ingredients = dish.IngredientsString.Split(",");
+
+            matratt.MatrattProdukt.Clear();
+            foreach (var ingredient in ingredients)
+            {
+                var produkt = await _dbService.GetIngredientFromNameAsync(ingredient.Trim());
+                var matrattProdukt = new MatrattProdukt
+                {
+                    Matratt = matratt,
+                    MatrattId = matratt.MatrattId,
+                    Produkt = produkt,
+                    ProduktId = produkt.ProduktId
+                };
+                matratt.MatrattProdukt.Add(matrattProdukt);
+            }
+
+            return matratt;
+        }
+
+        public async Task<bool> CreateDishAsync(Dish dish)
+        {
+            var matratt = new Matratt();
+            matratt = await ConvertDishToMatrattAsync(dish, matratt);
+            
+            var result = await _dbService.AddNewDishAsync(matratt);
+
+            return (result);
+        }
+
+        public async Task<bool> UpdateDishAsync(Dish dish)
+        {
+            var matratt = await _dbService.GetMatrattAsync(dish.DishId);
+            matratt = await ConvertDishToMatrattAsync(dish, matratt);
+
+            var result = await _dbService.UpdateDishAsync(matratt);
+            return result;
         }
 
         public async Task<Dish> GetDishAsync(int dishId)
         {
-            var matratt = await _dbService.GetDishAsync(dishId);
-            var dish = ConvertMatrattToDish(matratt);
+            var matratt = await _dbService.GetMatrattAsync(dishId);
+            var dish = await ConvertMatrattToDishAsync(matratt);
 
             return dish;
         }
@@ -103,7 +157,7 @@ namespace Tomasos.BusinessLayer
 
             foreach (var dish in model.Dishes)
             {
-                var matratt = await _dbService.GetDishAsync(dish.DishId);
+                var matratt = await _dbService.GetMatrattAsync(dish.DishId);
                 var orderDetail = new BestallningMatratt()
                 {
                     Antal = dish.Quantity,

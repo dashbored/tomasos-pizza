@@ -13,8 +13,13 @@ namespace Tomasos.Services
         Task<bool> AddNewCustomerAsync(Kund customer);
         Task<bool> AddNewOrderAsync(Bestallning order);
         Task<List<AspNetUsers>> GetAllUsersAsync();
-        Task<List<Matratt>> GetDishesAsync();
-        Task<Matratt> GetDishAsync(int id);
+        Task<List<Matratt>> GetMattraterAsync();
+        Task<Matratt> GetMatrattAsync(int id);
         Task<List<Produkt>> GetIngredientsAsync(int matrattId);
+        Task<Produkt> GetIngredientFromNameAsync(string ingredientName);
+        Task<bool> AddNewIngredientAsync(string ingredientName);
+        Task<bool> AddNewDishAsync(Matratt dish);
+        Task<bool> UpdateDishAsync(Matratt dish);
+       
     }
 }

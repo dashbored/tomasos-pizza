@@ -1,22 +1,27 @@
 ﻿@model Tomasos.Models.CartViewModels.CartViewModel
+@{
+    ViewData["Title"] = "Create/Update dish";
+}
+<div class="mt-3">
+    <h2 class="text-center">@ViewData["Title"]</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-5 my-3">
+            <form asp-controller="Admin" asp-action="ManageDishesViewComponent"
+                  data-ajax="true"
+                  data-ajax-method="POST"
+                  data-ajax-mode="replace"
+                  data-ajax-update="#UpdateDish">
 
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <form asp-controller="Admin" asp-action="ManageDishesViewComponent"
-              data-ajax="true"
-              data-ajax-method="POST"
-              data-ajax-mode="replace"
-              data-ajax-update="#dishes">
+                <div class="form-group">
+                    <select id="drpDishes" asp-for="DishId" asp-items="@Model.DishList" class="form-control">
+                        <option value="0">Please select a dish</option>
+                        <option value="1">NEW DISH</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
 
-            <div class="form-group">
-                <select asp-for="DishId" asp-items="@Model.DishList" class="form-control">
-                </select>
-            </div>
-            <div class="form-group">
-
-            </div>
-
-            <button type="submit" class="btn btn-default">Hej</button>
-        </form>
+        </div>
     </div>
+    <div id="UpdateDish" class="row justify-content-center"></div>
 </div>

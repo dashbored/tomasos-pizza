@@ -24,6 +24,10 @@ $(document).ready(function () {
         }
     });
 
+    //$("#drpDishes").change(function() {
+
+    //    this.form.submit();
+    //});
 
 });
 

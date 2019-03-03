@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query.ExpressionVisitors.Internal;
+using Remotion.Linq.Clauses;
 using Tomasos.Models.Identity;
 
 namespace Tomasos.Services
@@ -64,7 +65,7 @@ namespace Tomasos.Services
                           select u).ToListAsync();
         }
 
-        public async Task<List<Matratt>> GetDishesAsync()
+        public async Task<List<Matratt>> GetMattraterAsync()
         {
             return await (from dish in _context.Matratt
                           select dish)
@@ -73,7 +74,7 @@ namespace Tomasos.Services
                 .ThenInclude(e => e.Produkt).ToListAsync();
         }
 
-        public async Task<Matratt> GetDishAsync(int matrattId)
+        public async Task<Matratt> GetMatrattAsync(int matrattId)
         {
             return await (from dish in _context.Matratt
                           where dish.MatrattId == matrattId
@@ -86,24 +87,6 @@ namespace Tomasos.Services
 
         public async Task<List<Produkt>> GetIngredientsAsync(int matrattId)
         {
-            //var ingredientIds = await (from ingredient in _context.MatrattProdukt
-            //                           where ingredient.MatrattId == matrattId
-            //                           select ingredient).ToListAsync();
-            //if (ingredientIds.Count == 0)
-            //{
-            //    return new List<Produkt>();
-            //} 
-
-            //var ingredients = new List<Produkt>();
-            //foreach (var ingredient in ingredientIds)
-            //{
-            //    var dishIngredient = await (from ing in _context.Produkt
-            //                                where ing.ProduktId == ingredient.ProduktId
-            //                                select ing).FirstOrDefaultAsync();
-
-            //    ingredients.Add(dishIngredient);
-            //}
-            
             var dish = await _context.Matratt.Where(e => e.MatrattId == matrattId)
                 .Include(e => e.MatrattProdukt)
                 .ThenInclude(e => e.Produkt)
@@ -112,6 +95,57 @@ namespace Tomasos.Services
             var ingredients = dish.MatrattProdukt.Select(e => e.Produkt).ToList();
 
             return ingredients;
+        }
+
+        public async Task<Produkt> GetIngredientFromNameAsync(string ingredientName)
+        {
+            var ingredient = await (from ing in _context.Produkt
+                                    where ing.ProduktNamn == ingredientName
+                                    select ing).SingleOrDefaultAsync();
+
+            if (ingredient == null)
+            {
+                var result = await AddNewIngredientAsync(ingredientName);
+                ingredient = await (from ing in _context.Produkt
+                                    where ing.ProduktNamn == ingredientName
+                                    select ing).SingleOrDefaultAsync();
+            }
+
+            return ingredient;
+
+        }
+
+        public async Task<bool> AddNewIngredientAsync(string ingredientName)
+        {
+            var ingredient = new Produkt();
+            ingredient.ProduktNamn = ingredientName;
+            _context.Produkt.Add(ingredient);
+
+            var result = await _context.SaveChangesAsync();
+            return (result >= 1);
+        }
+
+        public async Task<bool> AddNewDishAsync(Matratt dish)
+        {
+            _context.Matratt.Add(dish);
+            var result = await _context.SaveChangesAsync();
+
+            return (result >= 1);
+        }
+
+        public async Task<bool> UpdateDishAsync(Matratt dish)
+        {
+            var checkDish = await (from d in _context.Matratt
+                                   where d.MatrattId == dish.MatrattId
+                                   select d).SingleOrDefaultAsync();
+
+            if (checkDish == null)
+            {
+                return false;
+            }
+            var result = await _context.SaveChangesAsync();
+
+            return await Task.FromResult(result >= 1);
         }
     }
 }

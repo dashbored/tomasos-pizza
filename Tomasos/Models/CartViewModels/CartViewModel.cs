@@ -12,6 +12,8 @@ namespace Tomasos.Models.CartViewModels
 
         public int DishId { get; set; }
 
+        public Dish Dish { get; set; }
+
         public SelectList DishList { get; set; }
 
         public int BonusPoints { get; set; }
