@@ -17,23 +17,10 @@ namespace Tomasos.Views.ViewComponents
     public class ManageUsersViewComponent : ViewComponent
     {
         private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ILogger _logger;
-        private readonly ITomasosService _dbService;
-        private readonly IUserRepository _userRepository;
 
-        public ManageUsersViewComponent(
-            UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            ILogger<AccountController> logger,
-            ITomasosService dbService,
-            IUserRepository userRepository)
+        public ManageUsersViewComponent(UserManager<ApplicationUser> userManager)
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _logger = logger;
-            _dbService = dbService;
-            _userRepository = userRepository;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()

@@ -56,7 +56,7 @@ namespace Tomasos.BusinessLayer
             return model;
         }
 
-        private Dish ConvertMatrattToDish(Matratt matratt)
+        public Dish ConvertMatrattToDish(Matratt matratt)
         {
             var dish = new Dish
             {
@@ -117,8 +117,11 @@ namespace Tomasos.BusinessLayer
 
             order.Totalbelopp = user.IsPremium ? model.PremiumPrice : model.TotalPrice;
 
-            await _dbService.AddNewOrderAsync(order);
-
+            var result = await _dbService.AddNewOrderAsync(order);
+            if (result)
+            {
+                user.BonusPoints = model.BonusPoints;
+            }
             return await Task.FromResult<bool>(true);
         }
 

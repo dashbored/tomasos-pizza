@@ -88,12 +88,11 @@ namespace Tomasos.Controllers
 
                 var model = _cart.CreateViewModel(cart, user);
                 var result = await _cart.OrderAsync(model, user);
+                var updateResult = await _userManager.UpdateAsync(user);
 
                 HttpContext.Session.Remove("cart");
             }
-
             return View();
-
         }
 
         public IActionResult Remove(int id)

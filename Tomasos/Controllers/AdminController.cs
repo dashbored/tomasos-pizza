@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Tomasos.BusinessLayer;
 using Tomasos.Data;
 using Tomasos.Models.AdminViewModels;
+using Tomasos.Models.CartViewModels;
 using Tomasos.Services;
 
 namespace Tomasos.Controllers
@@ -73,6 +74,7 @@ namespace Tomasos.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> MarkAdmin(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -100,6 +102,7 @@ namespace Tomasos.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> MarkPremium(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -129,6 +132,7 @@ namespace Tomasos.Controllers
         }
 
         [ValidateAntiForgeryToken]
+        [HttpPost]
         public async Task<IActionResult> MarkRegular(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
@@ -156,9 +160,24 @@ namespace Tomasos.Controllers
             return View("Index");
         }
 
-        public IActionResult ManageUsersViewComponent()
+        //public IActionResult ManageUsersViewComponent()
+        //{
+        //    return ViewComponent("ManageUsersViewComponent");
+        //}
+
+        //[HttpGet]
+        //public IActionResult ManageDishesViewComponent()
+        //{
+        //    ViewData["test"] = "blah";
+        //    return ViewComponent("ManageDishes");
+        //}
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> ManageDishesViewComponent(CartViewModel model)
         {
-            return ViewComponent("ManageUsersViewComponent");
+            await Task.Delay(1);
+            return ViewComponent("ManageDishes");
         }
     }
 }

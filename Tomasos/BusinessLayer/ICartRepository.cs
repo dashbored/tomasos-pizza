@@ -14,5 +14,6 @@ namespace Tomasos.BusinessLayer
         Task<Dish> GetDishAsync(int dishId);
         Task<bool> OrderAsync(CartViewModel model, ApplicationUser user);
         CartViewModel CreateViewModel(List<Dish> cart, ApplicationUser result);
+        Dish ConvertMatrattToDish(Matratt matratt);
     }
 }
