@@ -133,17 +133,12 @@ namespace Tomasos.Controllers
             return View("Index");
         }
 
-        //public IActionResult ManageUsersViewComponent()
+
+        //public IActionResult ManageDishesViewComponent()
         //{
-        //    return ViewComponent("ManageUsersViewComponent");
+        //    ViewData["test"] = "blah";
+        //    return ViewComponent("ManageDishes");
         //}
-
-
-        public IActionResult ManageDishesViewComponent()
-        {
-            ViewData["test"] = "blah";
-            return ViewComponent("ManageDishes");
-        }
 
         [ValidateAntiForgeryToken]
         [HttpPost]
@@ -180,6 +175,16 @@ namespace Tomasos.Controllers
 
 
             return View("Index");
+        }
+
+        [ValidateAntiForgeryToken]
+        [HttpPost]
+        public async Task<IActionResult> ManageOrdersViewComponent(Order model)
+        {
+            var order = await _dbService.GetOrderFromIdAsync(model.BestallningsId);
+            order.Levererad = true;
+            var result = await _dbService.SaveChangesAsync();
+            return RedirectToAction("Index","Admin");
         }
     }
 }

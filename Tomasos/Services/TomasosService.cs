@@ -147,5 +147,25 @@ namespace Tomasos.Services
 
             return await Task.FromResult(result >= 1);
         }
+
+        public async Task<List<Bestallning>> GetAllOrdersAsync()
+        {
+            return await (from order in _context.Bestallning
+                          select order).Include(e => e.Kund).ToListAsync();
+        }
+
+        public async Task<Bestallning> GetOrderFromIdAsync(int bestallningsId)
+        {
+            return await(from o in _context.Bestallning
+                         where o.BestallningId == bestallningsId
+                         select o).SingleOrDefaultAsync();
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            var result = await _context.SaveChangesAsync();
+
+            return (result >= 1);
+        }
     }
 }

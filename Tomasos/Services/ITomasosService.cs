@@ -20,6 +20,10 @@ namespace Tomasos.Services
         Task<bool> AddNewIngredientAsync(string ingredientName);
         Task<bool> AddNewDishAsync(Matratt dish);
         Task<bool> UpdateDishAsync(Matratt dish);
-       
+        Task<List<Bestallning>> GetAllOrdersAsync();
+        Task<Bestallning> GetOrderFromIdAsync(int bestallningsId);
+
+        Task<bool> SaveChangesAsync();
+
     }
 }

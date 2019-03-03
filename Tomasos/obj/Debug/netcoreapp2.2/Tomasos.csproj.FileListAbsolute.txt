@@ -69,3 +69,5 @@ C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp
 C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Cart\Order.g.cshtml.cs
 C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Admin\Components\ManageDishes\Default.g.cshtml.cs
 C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Admin\_UpdateDishPartial.g.cshtml.cs
+C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Admin\Components\ManageOrders\Default.g.cshtml.cs
+C:\Users\richa\Desktop\C#\Inlamning\Tomasos\Tomasos\Tomasos\obj\Debug\netcoreapp2.2\Razor\Views\Admin\Components\Order\Default.g.cshtml.cs
