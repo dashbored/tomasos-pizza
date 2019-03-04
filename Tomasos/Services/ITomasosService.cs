@@ -23,6 +23,7 @@ namespace Tomasos.Services
         Task<List<Bestallning>> GetAllOrdersAsync();
         Task<Bestallning> GetOrderFromIdAsync(int bestallningsId);
 
+        Task<bool> RemoveOrder(int id);
         Task<bool> SaveChangesAsync();
 
     }

@@ -1,7 +1,7 @@
 ﻿@model Tomasos.Models.AdminViewModels.Order
 
 <form asp-controller="Admin" asp-action="ManageOrdersViewComponent">
-      @*data-ajax="true"
+    @*data-ajax="true"
       data-ajax-method="POST"
       data-ajax-mode="replace"
       data-ajax-update="#ManageOrders">*@
@@ -10,4 +10,7 @@
     <input type="hidden" asp-for="@Model.KundId"/>
     <input type="hidden" asp-for="@Model.BestallningsId"/>
     <button class="btn btn-primary">Update</button>
+</form>
+<form asp-controller="Admin" asp-action="DeleteOrder" asp-route-id="@Model.BestallningsId">
+    <button type="submit" class="btn btn-primary ">Delete</button>
 </form>

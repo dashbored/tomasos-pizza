@@ -156,9 +156,21 @@ namespace Tomasos.Services
 
         public async Task<Bestallning> GetOrderFromIdAsync(int bestallningsId)
         {
-            return await(from o in _context.Bestallning
-                         where o.BestallningId == bestallningsId
-                         select o).SingleOrDefaultAsync();
+            return await (from o in _context.Bestallning
+                          where o.BestallningId == bestallningsId
+                          select o).SingleOrDefaultAsync();
+        }
+
+        public async Task<bool> RemoveOrder(int id)
+        {
+            var order = await(from o in _context.Bestallning
+                              where o.BestallningId == id
+                              select o).Include(e=>e.BestallningMatratt).SingleOrDefaultAsync();
+            _context.BestallningMatratt.RemoveRange(order.BestallningMatratt);
+            _context.Bestallning.Remove(order);
+            var result = await _context.SaveChangesAsync();
+            return (result >= 1);
+
         }
 
         public async Task<bool> SaveChangesAsync()

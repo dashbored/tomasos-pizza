@@ -194,5 +194,12 @@ namespace Tomasos.Controllers
             var result = await _dbService.SaveChangesAsync();
             return RedirectToAction("Index", "Admin");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteOrder(int id)
+        {
+            var result = await _dbService.RemoveOrder(id);
+            return RedirectToAction("Index", "Admin");
+        }
     }
 }
