@@ -153,6 +153,8 @@ namespace Tomasos.BusinessLayer
                     dish.Quantity++;
                     model.Dishes.Add(dish);
                 }
+
+                model.BonusPoints -= 100;
             }
 
             foreach (var dish in model.Dishes)
